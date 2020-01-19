@@ -8,7 +8,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports.create = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
-  if (typeof data.title !== 'string' || data.title === '') {
+  if (typeof data.option !== 'string') {
     console.error('Validation Failed');
     callback(null, {
       statusCode: 501,
@@ -16,7 +16,7 @@ module.exports.create = (event, context, callback) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify({ message: 'Needs a title.' })
+      body: JSON.stringify({ message: 'Couldn\'t create the item.' })
     });
     return;
   }
@@ -24,14 +24,10 @@ module.exports.create = (event, context, callback) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Item: {
-      id: uuid.v1(),
-      sort: 'poll-details',
-      title: data.title,
-      creator: data.creator === '' ? null : data.creator,
-      description: data.description === '' ? null : data.description,
-      options: data.options,
-      createdAt: timestamp,
-      updatedAt: timestamp
+      id: data.id,
+      sort: 'vote-' + uuid.v1(),
+      creator: data.creator,
+      option: data.option
     },
   };
 

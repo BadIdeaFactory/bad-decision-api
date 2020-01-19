@@ -21,42 +21,42 @@ provider:
 
 functions:
   create:
-    handler: Polls/create.create
+    handler: polls/create.create
     events:
       - http:
-          path: Polls
+          path: polls
           method: post
           cors: true
 
   list:
-    handler: Polls/list.list
+    handler: polls/list.list
     events:
       - http:
-          path: Polls
+          path: polls
           method: get
           cors: true
 
   get:
-    handler: Polls/get.get
+    handler: polls/get.get
     events:
       - http:
-          path: Polls/{id}
+          path: polls/{id}
           method: get
           cors: true
 
   update:
-    handler: Polls/update.update
+    handler: polls/update.update
     events:
       - http:
-          path: Polls/{id}
+          path: polls/{id}
           method: put
           cors: true
 
   delete:
-    handler: Polls/delete.delete
+    handler: polls/delete.delete
     events:
       - http:
-          path: Polls/{id}
+          path: polls/{id}
           method: delete
           cors: true
 
