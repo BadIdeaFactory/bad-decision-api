@@ -5,6 +5,10 @@ const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-depe
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const params = {
   TableName: process.env.DYNAMODB_TABLE,
+  KeyConditionExpression: "sort = :sort",
+  ExpressionAttributeValues: {
+    ':sort': 'poll-details'
+  }
 };
 
 module.exports.list = (event, context, callback) => {

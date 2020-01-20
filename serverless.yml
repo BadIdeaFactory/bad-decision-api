@@ -52,6 +52,14 @@ functions:
           method: put
           cors: true
 
+  vote:
+    handler: polls/vote.create
+    events:
+      - http:
+          path: polls/vote
+          method: post
+          cors: true
+
   delete:
     handler: polls/delete.delete
     events:
@@ -70,10 +78,16 @@ resources:
           -
             AttributeName: id
             AttributeType: S
+          -
+            AttributeName: sort
+            AttributeType: S
         KeySchema:
           -
             AttributeName: id
             KeyType: HASH
+          -
+            AttributeName: sort
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

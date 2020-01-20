@@ -7,13 +7,14 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports.get = (event, context, callback) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
-    Key: {
-      id: event.pathParameters.id,
-    },
+    KeyConditionExpression: "id = :id",
+    ExpressionAttributeValues: {
+      ':id': event.pathParameters.id
+    }
   };
 
   // fetch from the database
-  dynamoDb.get(params, (error, result) => {
+  dynamoDb.query(params, (error, result) => {
     // handle potential errors
     if (error) {
       console.error(error);
@@ -28,6 +29,10 @@ module.exports.get = (event, context, callback) => {
       return;
     }
 
+    let poll = result.Items.find(item => item.sort == 'poll-details');
+
+    poll.votes = result.Items.filter(item => item.sort.indexOf('vote-') !== -1);
+
     // create a response
     const response = {
       statusCode: 200,
@@ -35,7 +40,7 @@ module.exports.get = (event, context, callback) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify(result.Item),
+      body: JSON.stringify(poll),
     };
     callback(null, response);
   });

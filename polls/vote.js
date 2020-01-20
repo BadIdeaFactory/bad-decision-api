@@ -26,8 +26,10 @@ module.exports.create = (event, context, callback) => {
     Item: {
       id: data.id,
       sort: 'vote-' + uuid.v1(),
-      creator: data.creator,
-      option: data.option
+      creator: data.creator === '' ? null : data.creator,
+      option: data.option,
+      createdAt: timestamp,
+      updatedAt: timestamp
     },
   };
 
