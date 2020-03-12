@@ -19,6 +19,16 @@ provider:
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
+plugins:
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: api.baddecisions.app
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: false
+
 functions:
   create:
     handler: polls/create.create
